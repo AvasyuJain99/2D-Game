@@ -8,51 +8,71 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float jumpForce;
     [SerializeField]
-    private bool isGrounded=false;
-    [SerializeField]
     private LayerMask layerMask;
+    private bool resetJump = false;
+    private bool grounded = false;
+    [SerializeField]
+    private float speed;
+    private PlayerAnimation playerAnimation;
+    
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        playerAnimation = GetComponent<PlayerAnimation>();
     }
 
     // Update is called once per frame
     void Update()
     {
         Movement();
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true)
-            Jump();
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.down,0.6f,layerMask);
-        Debug.DrawRay(transform.position, Vector2.down,Color.green,0.6f);
-        if (hitInfo.collider != null)
-        {
-            isGrounded = true;
-        }
+       
     }
     void Movement()
     {
         float hInput = Input.GetAxisRaw("Horizontal");
-        rb.velocity = new Vector2(hInput, rb.velocity.y);
-        if (Input.GetKeyDown(KeyCode.A))
+        grounded = IsGrounded();
+        playerAnimation.Move(hInput);
+        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded() == true)
         {
-            gameObject.GetComponentInChildren<SpriteRenderer>().flipX = true;
-        }
-        else if (Input.GetKeyDown(KeyCode.D))
-        {
-            gameObject.GetComponentInChildren<SpriteRenderer>().flipX = false;
-        }
-    }
-    private void Jump()
-    {
+            Debug.Log("Jump");  
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-        
-        StartCoroutine(jumpCooldown());
+            StartCoroutine(JumpCooldown());
+            playerAnimation.Jump(true);
+        }
+        rb.velocity = new Vector2(hInput * speed, rb.velocity.y);
+        flipPlayer(hInput);
     }
-    private IEnumerator jumpCooldown()
+   bool IsGrounded()
     {
+     RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.down, 1f, layerMask);
+      
+         if (hitInfo.collider != null)
+        {
+            Debug.Log("hitInfo" + hitInfo.collider.name);
+            if (resetJump == false)
+            {
+                playerAnimation.Jump(false);
+                return true;
+            }
+        }
+        return false;
+    }
+    void flipPlayer(float hInput)
+    {
+        if (hInput > 0)
+        {
+            GetComponentInChildren<SpriteRenderer>().flipX = false;
+        }
+        else if (hInput < 0)
+        {
+            GetComponentInChildren<SpriteRenderer>().flipX = true;
+        }
+    }
+    IEnumerator JumpCooldown()
+    {
+        resetJump = true;
         yield return new WaitForSeconds(0.1f);
-        isGrounded=false;
-
+        resetJump = false;
     }
 }
