@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float speed;
     private PlayerAnimation playerAnimation;
-    
+    public int diamonds;
     // Start is called before the first frame update
     void Start()
     {
@@ -84,10 +84,7 @@ public class Player : MonoBehaviour
 
         }
     }
-    void Attack()
-    {
-      
-    }
+  
     IEnumerator JumpCooldown()
     {
         resetJump = true;

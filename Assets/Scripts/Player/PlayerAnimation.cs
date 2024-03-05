@@ -8,11 +8,11 @@ public class PlayerAnimation : MonoBehaviour
     private Animator player;
     private Animator swordEffect;
    
-    // Start is called before the first frame update
     void Start()
     {
         player = GetComponentInChildren<Animator>();
         swordEffect = transform.GetChild(1).GetComponent<Animator>();
+       
     }
     public void Move(float move)
     {
@@ -26,6 +26,7 @@ public class PlayerAnimation : MonoBehaviour
     {
         player.SetTrigger("Attack");
         swordEffect.SetTrigger("SwordEffect");
+    
     }
    
 
