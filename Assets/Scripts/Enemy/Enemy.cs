@@ -15,11 +15,15 @@ public abstract class Enemy : MonoBehaviour
     protected Animator anim;
     protected SpriteRenderer sprite;
     protected Vector3 currentTarget;
-
+    protected bool isHit = false;
+    protected float distance;
+    protected Player player;
+    protected bool isDead;
     public virtual void Init()
     {
         anim = GetComponentInChildren<Animator>();
         sprite = GetComponentInChildren<SpriteRenderer>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
     }
     private void Start()
     {
@@ -27,15 +31,15 @@ public abstract class Enemy : MonoBehaviour
     }
     protected virtual void Update()
     {
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle")&&anim.GetBool("InCombat")==false)
         {
         
             return;
         }
-
+        if(isDead==false)
         Movement();
     }
-   void Movement()
+  public virtual void Movement()
     {
           if (currentTarget == pointA.position)
         {
@@ -56,7 +60,26 @@ public abstract class Enemy : MonoBehaviour
             anim.SetTrigger("Idle");
 
         }
+        if (isHit == false)
+        {
         transform.position = Vector3.MoveTowards(transform.position, currentTarget, speed * Time.deltaTime);
+
+        }
+        float distance = Vector3.Distance(transform.localPosition, player.transform.localPosition);
+        if (distance > 2.0f)
+        {
+            isHit = false;
+            anim.SetBool("InCombat", false);
+        }
+        Vector2 direction = player.transform.localPosition - transform.localPosition;
+        if (direction.x > 0 && anim.GetBool("InCombat") == true)
+        {
+            sprite.flipX = false;
+        }
+        else if (direction.x < 0 && anim.GetBool("InCombat") == true)
+        {
+            sprite.flipX = true;
+        }
     }
 }
     

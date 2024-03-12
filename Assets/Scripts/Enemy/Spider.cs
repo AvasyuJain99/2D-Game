@@ -5,14 +5,29 @@ using UnityEngine;
 public class Spider : Enemy,IDamageable
 {
     public int Health { get; set; }
+    [SerializeField]
+    private GameObject acidPrefab;
     public override void Init()
     {
         base.Init();
         Health = base.health;
-    } 
-    public void Damage(int damageAmmount)
+    }
+    public override void Movement()
     {
-
+       
+    }
+    public void Damage()
+    {
+        Health--;
+        if (Health < 1)
+        {
+            isDead = true;
+            anim.SetTrigger("Death");
+        }
+    }
+    public void Attack()
+    {
+        Instantiate(acidPrefab, transform.position, Quaternion.identity);
     }
 }
 

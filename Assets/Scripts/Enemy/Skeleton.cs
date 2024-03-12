@@ -10,8 +10,25 @@ public class Skeleton : Enemy,IDamageable
         base.Init();
         Health = base.health;
     }
-    public void Damage(int damageAmmount)
+    public override void Movement()
     {
+        base.Movement();
+       
+    }
+
+    public void Damage()
+    {
+        Debug.Log("Damage");
+        Health--;
+        anim.SetTrigger("Hit");
+        isHit = true;
+        anim.SetBool("InCombat", true);
+        if (Health < 1)
+        {
+            isDead = true;
+            anim.SetTrigger("Death");
+        }
+
 
     }
 }
