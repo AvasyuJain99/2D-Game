@@ -28,6 +28,13 @@ public class PlayerAnimation : MonoBehaviour
         swordEffect.SetTrigger("SwordEffect");
     
     }
-   
+   public void Hit()
+    {
+        player.SetTrigger("Hit");
 
+    }
+    public void Death()
+    {
+        player.SetTrigger("Death");
+    }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Player : MonoBehaviour,IDamageable
 {
     private Rigidbody2D rb;
@@ -16,16 +16,21 @@ public class Player : MonoBehaviour,IDamageable
     private PlayerAnimation playerAnimation;
     public int diamonds;
     public int Health { get; set; }
+    public List<Image> healthUnits = new List<Image>();
+    private bool isDead = false;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         playerAnimation = GetComponent<PlayerAnimation>();
+        Health = 4;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (isDead == true)
+            return;
         Movement();
         if (Input.GetMouseButtonDown(0) && IsGrounded() == true)
         {
@@ -40,7 +45,7 @@ public class Player : MonoBehaviour,IDamageable
         playerAnimation.Move(hInput);
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded() == true)
         {
-            Debug.Log("Jump");  
+            //Debug.Log("Jump");  
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             StartCoroutine(JumpCooldown());
             playerAnimation.Jump(true);
@@ -95,7 +100,21 @@ public class Player : MonoBehaviour,IDamageable
 
     public void Damage()
     {
+        if (isDead == true)
+            return;
         Debug.Log("Player got hit");
         Health--;
+        healthUnits[Health].gameObject.SetActive(false);
+        if (Health < 1)
+        {
+            Debug.Log("Game Over");
+            playerAnimation.Death();
+            isDead = true;
+        }
+        else
+        {
+            playerAnimation.Hit();
+        }
+
     }
 }

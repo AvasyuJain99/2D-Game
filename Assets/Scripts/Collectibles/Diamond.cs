@@ -4,21 +4,18 @@ using UnityEngine;
 
 public class Diamond : MonoBehaviour
 {
-    private Player player;
+
     [SerializeField]
-    private int value;
+    public int value = 1;
     private void OnTriggerEnter2D(Collider2D other)
     {
-        player = other.GetComponent<Player>();
+       
         if (other.gameObject.tag == "Player")
-        {
+        { 
+            Player player = other.GetComponent<Player>();
+            player.diamonds += value;
+            UIManager.instance.playerCoinCountText.text = player.diamonds.ToString();
             Destroy(this.gameObject);
-            collectDiamond();
         }
-    }
-
-    void collectDiamond()
-    {
-        player.diamonds += value;
     }
 }

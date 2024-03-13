@@ -19,6 +19,8 @@ public abstract class Enemy : MonoBehaviour
     protected float distance;
     protected Player player;
     protected bool isDead;
+    [SerializeField]
+    protected GameObject diamondPrefab;
     public virtual void Init()
     {
         anim = GetComponentInChildren<Animator>();

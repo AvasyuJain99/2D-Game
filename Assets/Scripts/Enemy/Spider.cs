@@ -18,11 +18,15 @@ public class Spider : Enemy,IDamageable
     }
     public void Damage()
     {
+        if (isDead == true)
+            return;
         Health--;
         if (Health < 1)
         {
             isDead = true;
             anim.SetTrigger("Death");
+            var go = Instantiate(diamondPrefab, transform.position, Quaternion.identity);
+            go.GetComponent<Diamond>().value = gems;
         }
     }
     public void Attack()
