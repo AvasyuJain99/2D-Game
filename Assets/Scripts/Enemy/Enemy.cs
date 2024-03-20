@@ -16,7 +16,6 @@ public abstract class Enemy : MonoBehaviour
     protected SpriteRenderer sprite;
     protected Vector3 currentTarget;
     protected bool isHit = false;
-    protected float distance;
     protected Player player;
     protected bool isDead;
     [SerializeField]
