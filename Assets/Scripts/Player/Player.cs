@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityStandardAssets.CrossPlatformInput;
 public class Player : MonoBehaviour,IDamageable
 {
     private Rigidbody2D rb;
@@ -18,6 +19,7 @@ public class Player : MonoBehaviour,IDamageable
     public int Health { get; set; }
     public List<Image> healthUnits = new List<Image>();
     private bool isDead = false;
+    private float hInput;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,9 +32,14 @@ public class Player : MonoBehaviour,IDamageable
     void Update()
     {
         if (isDead == true)
+        {
+            rb.simulated = false;
+            if (IsGrounded() == false)
+                rb.simulated = true;
             return;
+        }
         Movement();
-        if (Input.GetMouseButtonDown(0) && IsGrounded() == true)
+        if (CrossPlatformInputManager.GetButtonDown("A_Btn") && IsGrounded() == true)
         {
             playerAnimation.Attack();
            
@@ -40,10 +47,10 @@ public class Player : MonoBehaviour,IDamageable
     }
     void Movement()
     {
-        float hInput = Input.GetAxisRaw("Horizontal");
+        hInput = CrossPlatformInputManager.GetAxisRaw("Horizontal");
         grounded = IsGrounded();
         playerAnimation.Move(hInput);
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded() == true)
+        if ((Input.GetKeyDown(KeyCode.Space)||CrossPlatformInputManager.GetButtonDown("B_Btn")) && IsGrounded() == true)
         {
             //Debug.Log("Jump");  
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
@@ -114,6 +121,7 @@ public class Player : MonoBehaviour,IDamageable
         else
         {
             playerAnimation.Hit();
+           
         }
 
     }

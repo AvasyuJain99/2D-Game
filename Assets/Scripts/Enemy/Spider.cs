@@ -25,6 +25,7 @@ public class Spider : Enemy,IDamageable
         {
             isDead = true;
             anim.SetTrigger("Death");
+            GetComponent<Collider2D>().enabled = false;
             var go = Instantiate(diamondPrefab, transform.position, Quaternion.identity);
             go.GetComponent<Diamond>().value = gems;
         }

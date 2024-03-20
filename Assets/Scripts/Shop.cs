@@ -60,6 +60,7 @@ public class Shop : MonoBehaviour
         {
             player.diamonds -= currentItemPrice;
             UIManager.instance.playerGemCountText.text = player.diamonds.ToString() + "G";
+            UIManager.instance.playerCoinCountText.text = player.diamonds.ToString() + "G";
         }
         else
         {
